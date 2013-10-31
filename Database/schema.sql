@@ -19,7 +19,7 @@ create table miembro(
 create table noticia(
   id          int           not null primary key check(id>0),
   titulo      varchar(20)   not null,
-  tipo        varchar(12)   not null check(tipo in ('Presentacion','Audicion','Taller','Otros'))
+  tipo        varchar(12)   not null check(tipo in ('Presentacion','Audicion','Taller','Otros')),
   descripcion nvarchar(max) not null,
   fecha       date          not null,
   cedula      int           not null foreign key references miembro(cedula) check(cedula>0)
@@ -33,17 +33,17 @@ create table foto(
   cedula  int         not null foreign key references miembro(cedula) check(cedula>0)
 );
 
+create table funcion(
+  id    int not null primary key check(id>0),
+  fecha date not null
+);
+
 create table entrada(
-  codigo int not null primary key check(id>0),
+  codigo int not null primary key check(codigo>0),
   numero int not null check(numero>0),
   precio int not null check(precio>0),
   id     int not null check(id>0) foreign key references funcion(id),
   cedula int not null check(cedula>0) foreign key references miembro(cedula)
-);
-
-create table funcion(
-  id    int not null primary key check(id>0),
-  fecha date not null
 );
 
 create table registra(
@@ -59,8 +59,8 @@ create table obra(
 );
 
 create table tiene(
-  idFuncion int not null foreign key references funcion(id) check(id>0),
-  idObra    int not null foreign key references obra(id) check(id>0),
+  idFuncion int not null foreign key references funcion(id) check(idFuncion>0),
+  idObra    int not null foreign key references obra(id) check(idObra>0),
   constraint pk_tiene primary key (idFuncion, idObra)
 );
 
@@ -71,10 +71,10 @@ create table personaje(
 );
 
 create table interpreta(
-  idFuncion   int not null foreign key references funcion(id) check(id>0),
-  idPersonaje int not null foreign key references personaje(id) check(id>0),
+  idFuncion   int not null foreign key references funcion(id) check(idFuncion>0),
+  idPersonaje int not null foreign key references personaje(id) check(idPersonaje>0),
   cedula  int         not null foreign key references miembro(cedula) check(cedula>0),
-  constraint pk_interpreta public key (idFuncion, idPersonaje, cedula)
+  constraint pk_interpreta primary key (idFuncion, idPersonaje, cedula)
 );
 
 create table item(
